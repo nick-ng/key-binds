@@ -15,7 +15,6 @@
 
 	let { keyName, label, width, height, isSpacing, keybindFilter }: Props =
 		$props();
-
 	let keyLabel = typeof label === 'string' ? label : keyName;
 
 	let keybinds = $derived(
@@ -48,20 +47,23 @@
 		{#if !isSpacing}
 			<span class="capitalize">{keyLabel}</span>
 			{#if keybinds.length > 0}
-				<div
-					class="pointer-events-none absolute top-full left-0 z-10 hidden flex-col items-start border bg-white p-2 group-hover:flex"
+				<table
+					class="pointer-events-none absolute top-[80%] left-8 z-10 hidden border-collapse flex-col items-start border bg-white p-1 group-hover:flex"
 				>
-					{#each keybinds as keybind}
-						<div class="w-max">
-							<span>{keybind.game}</span>: <span>{keybind.action}</span>
-						</div>
-					{/each}
-				</div>
+					<tbody>
+						{#each keybinds as keybind}
+							<tr>
+								<td class="px-1 text-left text-nowrap">{keybind.game}</td>
+								<td class="px-1 text-left text-nowrap">{keybind.action}</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
 			{/if}
 		{/if}
 	</button>
 	{#if $editingKey === keyName}
-		<div class="absolute top-full left-0 z-10 border bg-white p-2">
+		<div class="absolute top-[80%] left-8 z-10 border bg-white p-2">
 			<KeybindForm {keyName} />
 		</div>
 	{/if}

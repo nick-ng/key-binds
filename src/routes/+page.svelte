@@ -37,7 +37,11 @@
 			onclick={() => {
 				try {
 					const newKeybinds = JSON.parse(importKeybindString);
+					if (!confirm('This will overwrite any existing keybinds')) {
+						return;
+					}
 					$keybindsStore = newKeybinds;
+					importKeybindString = '';
 				} catch (e) {
 					alert('Invalid import string');
 				}

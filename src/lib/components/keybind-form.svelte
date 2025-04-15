@@ -1,18 +1,22 @@
 <script lang="ts">
 	interface Props {
 		keyName: string;
+		label?: string;
 	}
 
 	import { keybindsStore } from '$lib/stores/keybind-store';
 	import { editingKey } from '$lib/stores/controls-store';
 
-	let { keyName }: Props = $props();
+	let { keyName, label }: Props = $props();
+	let keyLabel = typeof label === 'string' ? label : keyName;
 
-	let currentKeybinds = $state($keybindsStore[keyName] || []);
+	let currentKeybinds = $state(
+		$keybindsStore[keyName] || [{ game: '', action: '' }]
+	);
 </script>
 
 <form
-	class="w-96"
+	class="min-w-96"
 	onsubmit={(formEvent) => {
 		formEvent.preventDefault();
 		$keybindsStore[keyName] = currentKeybinds
@@ -21,9 +25,8 @@
 		$editingKey = '';
 	}}
 >
-	<div
-		class={`${currentKeybinds.length > 0 ? 'mb-2' : ''} flex flex-row justify-between px-2`}
-	>
+	<h3 class="text-xl capitalize">{keyLabel}</h3>
+	<div class={`flex flex-row justify-between px-2`}>
 		<button
 			class="inline-block border p-2"
 			type="button"
@@ -33,7 +36,7 @@
 		><button class="inline-block border p-2">Save</button>
 	</div>
 	{#each currentKeybinds as keybind}
-		<div class="flex flex-row">
+		<div class="mt-1 flex flex-row gap-1">
 			<input
 				class="border px-1"
 				bind:value={keybind.game}
