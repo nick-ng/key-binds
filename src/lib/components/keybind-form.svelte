@@ -40,7 +40,7 @@
 			<input
 				class="border px-1"
 				bind:value={keybind.game}
-				placeholder="Category/Game"
+				placeholder="Genre:Game[:Class][:Modifier]"
 			/>
 			<input
 				class="border px-1"

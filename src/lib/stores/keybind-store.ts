@@ -3,20 +3,23 @@ import { browser } from '$app/environment';
 
 import { KEYBINDS_STORE_KEY } from '$lib/constants';
 
-let keybinds: { [keyName: string]: { game: string; action: string }[] } = {};
+interface Keybinds {
+	[keyName: string]: { game: string; action: string }[];
+}
+
+export const keybindsStore = writable<Keybinds>({});
 if (browser) {
 	try {
-		const storedKeyBinds = localStorage.getItem(KEYBINDS_STORE_KEY) || '';
+		const storedKeybinds = localStorage.getItem(KEYBINDS_STORE_KEY) || '';
 
-		if (storedKeyBinds) {
-			keybinds = JSON.parse(storedKeyBinds);
+		if (storedKeybinds) {
+			const tempKeybinds = JSON.parse(storedKeybinds);
+			keybindsStore.set(tempKeybinds);
 		}
 	} catch (err) {
 		console.error('error while retrieving keybinds', err);
 	}
 }
-
-export const keybindsStore = writable(keybinds);
 
 if (browser) {
 	keybindsStore.subscribe((newKeybinds) => {
