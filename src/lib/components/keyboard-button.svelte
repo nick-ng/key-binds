@@ -5,21 +5,38 @@
 		width?: number;
 		height?: number;
 		isSpacing?: boolean;
-		keybindFilter: string;
 	}
 
-	import { DEFAULT_KEY_SIZE_PIXELS } from '$lib/components/constants';
+	import { DEFAULT_KEY_SIZE_PIXELS } from '$lib/constants';
 	import { keybindsStore } from '$lib/stores/keybind-store';
-	import { editingKey } from '$lib/stores/controls-store';
+	import { editingKey, keybindFiltersStore } from '$lib/stores/controls-store';
+	import { parseRegExp } from '$lib/utils';
 	import KeybindForm from './keybind-form.svelte';
 
-	let { keyName, label, width, height, isSpacing, keybindFilter }: Props =
-		$props();
+	let { keyName, label, width, height, isSpacing }: Props = $props();
 	let keyLabel = typeof label === 'string' ? label : keyName;
 
+	let excludeRegExp = $derived(parseRegExp($keybindFiltersStore.exclude, 'i'));
+	let includeRegExp = $derived(parseRegExp($keybindFiltersStore.include, 'i'));
 	let keybinds = $derived(
 		($keybindsStore[keyName] || [])
-			.filter(({ game }) => game.includes(keybindFilter))
+			.filter(({ game }) => {
+				if ($keybindFiltersStore.useAdvanced) {
+					if (excludeRegExp && game.match(excludeRegExp)) {
+						return false;
+					}
+
+					if (includeRegExp && !game.match(includeRegExp)) {
+						return false;
+					}
+				}
+
+				if ($keybindFiltersStore.simple) {
+					return game.includes($keybindFiltersStore.simple);
+				}
+
+				return true;
+			})
 			.toSorted((a, b) => a.game.localeCompare(b.game))
 	);
 

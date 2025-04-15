@@ -1,1 +1,0 @@
-export const DEFAULT_KEY_SIZE_PIXELS = 48;
