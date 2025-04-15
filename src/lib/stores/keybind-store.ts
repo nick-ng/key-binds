@@ -19,9 +19,7 @@ if (browser) {
 	} catch (err) {
 		console.error('error while retrieving keybinds', err);
 	}
-}
 
-if (browser) {
 	keybindsStore.subscribe((newKeybinds) => {
 		const newKeybindsJSONString = JSON.stringify(newKeybinds);
 		localStorage.setItem(KEYBINDS_STORE_KEY, newKeybindsJSONString);

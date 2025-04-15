@@ -21,4 +21,9 @@ if (browser) {
 	} catch (err) {
 		console.error('error while retrieving filter settings', err);
 	}
+
+	keybindFiltersStore.subscribe((newKeybindFilters) => {
+		const newKeybindFiltersJSONString = JSON.stringify(newKeybindFilters);
+		localStorage.setItem(FILTER_STORE_KEY, newKeybindFiltersJSONString);
+	});
 }
