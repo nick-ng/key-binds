@@ -15,21 +15,21 @@
 	class="w-96"
 	onsubmit={(formEvent) => {
 		formEvent.preventDefault();
-		$keybindsStore[keyName] = currentKeybinds.toSorted((a, b) =>
-			a.game.localeCompare(b.game)
-		);
+		$keybindsStore[keyName] = currentKeybinds
+			.filter(({ game, action }) => game || action)
+			.sort((a, b) => a.game.localeCompare(b.game));
 		$editingKey = '';
 	}}
 >
 	<div
-		class={`${currentKeybinds.length > 0 ? 'mb-2' : ''} flex flex-row justify-between`}
+		class={`${currentKeybinds.length > 0 ? 'mb-2' : ''} flex flex-row justify-between px-2`}
 	>
 		<button
 			class="inline-block border p-2"
 			type="button"
 			onclick={() => {
 				currentKeybinds = currentKeybinds.concat([{ game: '', action: '' }]);
-			}}>Add Game</button
+			}}>Add</button
 		><button class="inline-block border p-2">Save</button>
 	</div>
 	{#each currentKeybinds as keybind}
