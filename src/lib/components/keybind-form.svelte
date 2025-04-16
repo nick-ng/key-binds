@@ -16,7 +16,6 @@
 </script>
 
 <form
-	class="min-w-96"
 	onsubmit={(formEvent) => {
 		formEvent.preventDefault();
 		$keybindsStore[keyName] = currentKeybinds
@@ -25,15 +24,25 @@
 		$editingKey = '';
 	}}
 >
-	<h3 class="text-xl capitalize">{keyLabel}</h3>
-	<div class={`flex flex-row justify-between px-2`}>
+	<div class="mb-2 flex flex-row justify-center">
+		<h3 class="text-xl capitalize">{keyLabel}</h3>
 		<button
-			class="inline-block border p-2"
+			class="absolute top-2 right-2 border px-2"
+			type="button"
+			onclick={() => {
+				$editingKey = '';
+			}}>Close</button
+		>
+	</div>
+	<div class={`flex flex-row justify-between`}>
+		<button
+			class="inline-block border px-2"
 			type="button"
 			onclick={() => {
 				currentKeybinds = currentKeybinds.concat([{ game: '', action: '' }]);
 			}}>Add</button
-		><button class="inline-block border p-2">Save</button>
+		>
+		<button class="inline-block border px-2">Save</button>
 	</div>
 	{#each currentKeybinds as keybind}
 		<div class="mt-1 flex flex-row gap-1">
@@ -47,6 +56,16 @@
 				bind:value={keybind.action}
 				placeholder="Action"
 			/>
+			{#if currentKeybinds.length > 1}
+				<button
+					class="border px-2"
+					type="button"
+					onclick={() => {
+						keybind.game = '';
+						keybind.action = '';
+					}}>X</button
+				>
+			{/if}
 		</div>
 	{/each}
 </form>
